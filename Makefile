@@ -1,4 +1,4 @@
-IMG_NAME := hugo-s3
+IMG_NAME := l0xy/hugo-s3:0.1
 SRC_DIR ?= $(shell pwd)/src
 OUTPUT_DIR ?= $(shell pwd)/output
 SITE_NAME ?= hugo-website
