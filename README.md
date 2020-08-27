@@ -8,6 +8,8 @@ This repository contains two things, really:
 
 Generates a Docker image named `hugo-s3` that contains everything you need to generate the Hugo site you've got the source for on your local machine
 
+This image is also available via `docker pull l0xy/hugo-s3`
+
 ## make serve
 
 Generates and serves the site provided in `./src` locally on your machinewith live updating so you can test the site as your working on it. The site is accessible from `http://localhost:1313` in your browser.
