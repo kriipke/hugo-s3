@@ -1,8 +1,8 @@
-FROM alpine:3.7
+FROM ruby:alpine3.12
 
 LABEL description="serve / build Hugo site"
 # config
-ENV HUGO_VERSION=0.74.3
+ENV HUGO_VERSION=0.75.1
 ENV HUGO_TYPE=_extended
 
 ENV URL=https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo${HUGO_TYPE}_${HUGO_VERSION}_Linux-64bit.tar.gz
@@ -12,7 +12,8 @@ RUN wget -O - ${URL} | tar -xz -C /usr/sbin hugo \
     && wget -O "awscliv2.zip" "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
     && unzip awscliv2.zip \
     && ./aws/install \
-    && rm ./awscliv2.zip
+    && rm ./awscliv2.zip \
+    && gem install asciidoctor-rouge rouge asciidoctor-interdoc-reftext asciidoctor-diagram asciidoctor-html5s
 
 COPY ./run.sh /run.sh
 VOLUME /src
