@@ -1,18 +1,27 @@
 # Hugo + AWS S3 complete toolchain
 
-This git repository includes:
-1. Bash scripts to automate the setup of your S3 buckets & TLS enabled Cloudfront distribution
-2.`Dockerfile` to build the image hosted here, see next section for more info (pre-build image available via `docker pull l0xy/hugo-s3-docker`)
-3. a `Makefile` that will allow you to, among other things, painlessly test and edit your website via Docker by simply typing `make`
-    * `make deploy` --  deploy your Hugo site to S3 per your Hugo sites `config.toml` file after making and testing changes
+This git repository includes the following tools that give you everything you need to create, edit, maintain and depoy a website using Hugo+asciidoctor and deploy it to a domain name purchased on (or transfered to) AWS:
+
+1. An interative shell script to automate the setup of the required AWS resources (S3 bucket, logging, TLS certificate & Cloudfront distribution).
+2. A `Dockerfile` for a Docker container with all the `Hugo` & `asciidoctor` tools needed to actually build the website.
+3. a `Makefile` that will allow you to, among other things, painlessly test and edit your website via Docker by simply running `make` in the correct directory.
 
 ## Cloudfront setup script
 
 If you don't already have a TLS enabled Cloudfront distrution setup, this bash file contains all the required code to get one setup -- all you need is a domain name from [Route53](https://aws.amazon.com/route53/).
 
-Note that a Cloudfront distribution is required to generate a TLS enabled website using S3 to deploy a Hugo website.
+When you run it you will be prompted for a few variables but the only one you really need is the domain name you want to deploy your Hugo site at. The rest of the prompts have default values which work fine unless you have special requirements.
+
+The script generates a comprehensive logfile, `cloudfront_generation.log`, so you can verify any changes that were made or AWS resources that were created.
+
+The final output of the script is a Hugo configuration file snippet that can be copied into your main Hugo configuration file for later use with `make deploy` (see below)
+
+Why `Cloudfront`?
+Deploying Hugo websites on AWS S3 has become a popular alternative to hosting your Hugo site on a webserver, and in order to host a TLS enabled website via S3 a Cloudfront distribution is required. Also, `Cloudfront` comes with some cool perks, notably quicker content distribution as it's proper CDN.
 
 ## `Makefile` workflow
+
+When properly setup, you can simply `cd` to the correct directory for your Hugo project and run `make` and then go to your browser and view your website live as changes are being made at `http://localhost:1313` without having to worry about have any Hugo or asciidoctor software on your local machine at all. Sounds great, right?
 
 When using the `Makefile`, the source code for the Hugo project you want to work with in a directory named `src/` located in the same directory as the `Makefile` 
 
@@ -51,7 +60,7 @@ This way you can just `cd` to the directory named after the site you're attempti
 
 Generates a Docker image named `hugo-s3` that contains everything you need to generate the Hugo site you've got the source for on your local machine.
 
-This image is also available via `docker pull l0xy/hugo-s3`, however this `make` target is available for those wish to modify the Docker container.
+This image is also available via `docker pull l0xy/hugo-s3`, so you don't typically need to use this command unless you've edited the Dockerfile yourself to add some extra functionality to Hugo.
 
 #### `make serve`
 
@@ -59,7 +68,7 @@ Since this is the default target, you can serve the site locally simply by runni
 
 #### `make deploy`
 
-This just generates and deploys the site to the first deployment listed in your hugo configuration. 
+This just generates and deploys the site to the first deployment listed in your hugo configuration. If you generated a Cloudfront deployment using the bash script that comes with this repository your deployment section will look very similar to this:
 ```
     [deployment]
       [[deployment.targets]]
@@ -69,8 +78,8 @@ This just generates and deploys the site to the first deployment listed in your 
 ```
 
 Before running `make deploy` it is assumed that you have:
- - an s3 bucket configured properly (publicly accessible, configured to host a static site, etc), see [here](https://capgemini.github.io/development/Using-S3-and-Hugo-to-Create-Hosting-Static-Website/). This can be done using the shell script that comes with the repository :)
- - a file `~/.aws/credentials` containing the credentials needed to access said bucket, i.e. you have configured the aws-cli on your local machine. The simplest way to do that is just to configure the AWS CLI on your machine, however it's not required as `aws-cli` is run from the Docker container. 
+- an s3 bucket configured properly (publicly accessible, configured to host a static site, etc); see [here](https://capgemini.github.io/development/Using-S3-and-Hugo-to-Create-Hosting-Static-Website/), or use the script that comes in this repository.
+ - a file `~/.aws/credentials` containing the credentials needed to access said bucket (the simplest way to do that is just to configure the `aws-cli` on your machine, however it's not required as `aws-cli` is run from the Docker container)
 
 ## Docker image
 
