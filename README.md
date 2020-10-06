@@ -1,11 +1,16 @@
-# Hugo/S3 Container + Utilities
+# Hugo + AWS S3 complete toolchain
 
 This git repository includes:
-1. Bash scripts to automate the setup of your S3 buckets & TLS enabled Cloudfront distribution (if you don't already have one setup) -- all you need is a domain name from [Route53](https://aws.amazon.com/route53/)
-    * If you want your website to be TLS enabled, you need to configure a Cloudfront distrubitution, so these are actually pretty helpful; if you don't know what you're doing it can get kinda thorny. If you'd rather do it manually, read [this article](https://itnext.io/hugo-website-with-ssl-on-s3-is-straightforward-right-errrrm-369c0f19ab07?gi=16d0cccb8a88)
+1. Bash scripts to automate the setup of your S3 buckets & TLS enabled Cloudfront distribution
 2.`Dockerfile` to build the image hosted here, see next section for more info (pre-build image available via `docker pull l0xy/hugo-s3-docker`)
 3. a `Makefile` that will allow you to, among other things, painlessly test and edit your website via Docker by simply typing `make`
     * `make deploy` --  deploy your Hugo site to S3 per your Hugo sites `config.toml` file after making and testing changes
+
+## Cloudfront setup script
+
+If you don't already have a TLS enabled Cloudfront distrution setup, this bash file contains all the required code to get one setup -- all you need is a domain name from [Route53](https://aws.amazon.com/route53/).
+
+Note that a Cloudfront distribution is required to generate a TLS enabled website using S3 to deploy a Hugo website.
 
 ## `Makefile` workflow
 
