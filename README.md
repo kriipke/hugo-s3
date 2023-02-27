@@ -1,4 +1,4 @@
-# Hugo + AWS S3 complete toolchain
+# Static Site Generation Toolchain: Asciidoctor + Hugo + AWS Cloudnfront
 
 This git repository includes the following tools that give you everything you need to create, edit, maintain and depoy a website using Hugo+asciidoctor and deploy it to a domain name purchased on (or transfered to) AWS:
 
